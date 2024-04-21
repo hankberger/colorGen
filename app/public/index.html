@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fetch Data</title>
+</head>
+<body>
+    <h1>Fetch Data from Server</h1>
+    <form id="dataForm">
+        <input type="text" id="inputField" placeholder="Enter query">
+        <button type="submit">Get Data</button>
+    </form>
+    <div id="responseData">Response will appear here...</div>
+    <img id="dynamicImage" src="placeholder.jpg" alt="Dynamic Image" width="300">
+
+    <script>
+        document.getElementById('dataForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    const userInput = document.getElementById('inputField').value;
+    fetch(`/api/makeImage?query=${encodeURIComponent(userInput)}`)
+        .then(response => response.json())
+        .then(data => {
+            const imageElement = document.getElementById('dynamicImage');
+            imageElement.src = data[0].url; // Ensure your JSON has `imageUrl`
+            document.getElementById('responseData').textContent = JSON.stringify(data);
+        })
+        .catch(error => {
+            document.getElementById('responseData').textContent = 'Error: ' + error;
+        });
+});
+    </script>
+</body>
+</html>
